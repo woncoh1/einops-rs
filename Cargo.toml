@@ -1,0 +1,36 @@
+[package]
+name = "einops-rs"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+description = "Readable tensor rearrangement, reduction, and repetition for Burn"
+license = "MIT"
+authors = ["Won C. Oh"]
+repository = "https://github.com/woncoh1/einops-rs"
+readme = "README.md"
+keywords = ["tensor", "einops", "burn", "machine-learning"]
+categories = ["science", "mathematics"]
+include = ["src/**", "tests/**", "examples/**", "tools/generate_reference.py", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE", "CHANGELOG.md", "RELEASING.md"]
+
+[features]
+default = ["burn"]
+burn = ["dep:burn-tensor"]
+
+[dependencies]
+burn-tensor = { version = "0.22.1", optional = true, default-features = false, features = ["std"] }
+
+[dev-dependencies]
+burn-tensor = { version = "0.22.1", default-features = false, features = ["std", "flex", "autodiff"] }
+
+[[example]]
+name = "basics"
+required-features = ["burn"]
+
+[package.metadata.docs.rs]
+all-features = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
