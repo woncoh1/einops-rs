@@ -1,19 +1,49 @@
 # Release 0.1.0
 
+## Development tools
+
+`rust-toolchain.toml` selects stable Rust with rustfmt, Clippy, and rust-analyzer.
+Use the default rustfmt style:
+
+```bash
+cargo fmt
+```
+
+In VS Code or VSCodium, install the recommended rust-analyzer extension. The
+workspace formats Rust files on save and runs Clippy with warnings treated as
+errors. CI checks the same tools and the minimum supported Rust version, 1.95.
+
 ## Verify locally
 
 Install Rust 1.95 or newer, then run from this directory:
 
 ```bash
 cargo fmt --check
-cargo clippy --all-targets --all-features -- -D warnings
-cargo test --all-features
-cargo test --no-default-features
-cargo run --example basics
-cargo publish --dry-run
+cargo clippy --locked --all-targets --all-features -- -D warnings
+cargo clippy --locked --all-targets --no-default-features -- -D warnings
+cargo test --locked --all-features
+cargo test --locked --no-default-features
+cargo doc --locked --all-features --no-deps
+cargo run --locked --example basics
+cargo bench --locked --bench tensor_ops -- --test
+cargo publish --locked --dry-run
 ```
 
-The dry run packages and checks the crate without uploading it.
+`--locked` uses the committed dependency versions. The benchmark smoke check
+validates the benchmark cases without collecting performance measurements. The
+publish dry run packages and checks the crate without uploading it.
+
+## Measure performance
+
+Run the Criterion suite on an otherwise idle machine:
+
+```bash
+cargo bench --locked --bench tensor_ops
+```
+
+Record the Rust version, CPU, tensor backend, input sizes, and benchmark settings
+with results. Compare matching cases on the same machine. CI runs the correctness
+smoke check only; it does not enforce timing thresholds on shared runners.
 
 ## Push to GitHub
 
@@ -41,7 +71,8 @@ After CI passes, create a GitHub release from `v0.1.0` and use the entry in
 ## Publish to crates.io later
 
 Confirm the crate name is available, verify the metadata in `Cargo.toml`, and
-authenticate with `cargo login`. Run `cargo publish --dry-run`, then
-`cargo publish` when ready. GitHub and crates.io publication are separate steps.
+authenticate with `cargo login`. Run `cargo publish --locked --dry-run`, then
+`cargo publish --locked` when ready. GitHub and crates.io publication are separate
+steps.
 
 Reference: [Cargo's publishing guide](https://doc.rust-lang.org/cargo/reference/publishing.html).
