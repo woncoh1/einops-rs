@@ -122,18 +122,37 @@ einops-rs = { path = "../einops-rs", default-features = false }
 
 ## Development
 
+`rust-toolchain.toml` installs rustfmt, Clippy, and rust-analyzer through rustup.
+Use the default Rust formatting style with `cargo fmt --all`. The included
+VS Code/VSCodium settings format on save and run Clippy in the editor.
+
 ```bash
-cargo fmt --check
-cargo clippy --all-targets --all-features -- -D warnings
-cargo test --all-features
-cargo test --no-default-features
-cargo doc --all-features --no-deps
+cargo fmt --all -- --check
+cargo clippy --locked --all-targets --all-features -- -D warnings
+cargo clippy --locked --all-targets --no-default-features -- -D warnings
+cargo test --locked --all-features
+cargo test --locked --no-default-features
+cargo doc --locked --all-features --no-deps
 ```
 
 Tests include expected tensor values generated with Python Einops. The committed
 fixtures allow normal Rust tests to run without Python.
 
 See [RELEASING.md](RELEASING.md) to push the project to GitHub and tag `v0.1.0`.
+
+## Benchmarks
+
+[Criterion](https://github.com/criterion-rs/criterion.rs) compares these operations
+with equivalent handwritten Burn code on the Flex CPU backend:
+
+```bash
+cargo bench --locked --bench tensor_ops
+```
+
+See [BENCHMARKS.md](BENCHMARKS.md) for measured results, methodology, and limitations.
+HTML reports are written to `target/criterion/report/index.html`.
+CI runs `cargo bench --locked --bench tensor_ops -- --test` to check the benchmark
+examples without imposing performance thresholds on shared runners.
 
 ## Acknowledgments and license
 

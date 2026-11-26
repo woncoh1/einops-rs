@@ -10,7 +10,7 @@ repository = "https://github.com/woncoh1/einops-rs"
 readme = "README.md"
 keywords = ["tensor", "einops", "burn", "machine-learning"]
 categories = ["science", "mathematics"]
-include = ["src/**", "tests/**", "examples/**", "tools/generate_reference.py", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE", "CHANGELOG.md", "RELEASING.md"]
+include = ["src/**", "tests/**", "examples/**", "benches/**", "benchmarks/**", "tools/generate_reference.py", "Cargo.toml", "Cargo.lock", "README.md", "LICENSE", "CHANGELOG.md", "RELEASING.md", "BENCHMARKS.md"]
 
 [features]
 default = ["burn"]
@@ -21,6 +21,12 @@ burn-tensor = { version = "0.22.1", optional = true, default-features = false, f
 
 [dev-dependencies]
 burn-tensor = { version = "0.22.1", default-features = false, features = ["std", "flex", "autodiff"] }
+criterion = { version = "0.8.2", features = ["html_reports"] }
+
+[[bench]]
+name = "tensor_ops"
+harness = false
+required-features = ["burn"]
 
 [[example]]
 name = "basics"

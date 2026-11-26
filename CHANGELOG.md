@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Standardize rustfmt and strict Clippy checks in the editor and CI.
+- Add Criterion benchmarks against equivalent Burn operations, with output
+  checks and a documented CPU performance baseline.
+
 ## 0.1.0 — 2026-11-24
 
 Initial source release.
